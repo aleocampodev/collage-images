@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button } from "@material-tailwind/react";
+import Modal from "../components/Modal";
 
 export default function Home() {
   const [imagesList, setImagesList] = useState(null);
@@ -20,7 +20,7 @@ export default function Home() {
     <>
       <div className="flex justify-center m-2">
         <h1 className="text-5xl  font-black">Collage Images</h1>
-        <Button color="red">Create</Button>
+        <Modal />
       </div>
 
       <div className="flex flex-wrap">
