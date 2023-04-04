@@ -1,15 +1,12 @@
 import { useEffect, useState } from "react";
 import Modal from "../components/Modal";
+import axios from "axios";
 
 export default function Home() {
   const [imagesList, setImagesList] = useState(null);
 
   const getImagesList = async () => {
-    fetch("/api/data")
-      .then((response) => response.json())
-      .then((json) => {
-        setImagesList(json);
-      });
+    axios.get("/api/data").then((response) => setImagesList(response));
   };
 
   useEffect(() => {
@@ -18,9 +15,11 @@ export default function Home() {
 
   return (
     <>
-      <div className="flex justify-center m-2">
-        <h1 className="text-5xl  font-black">Collage Images</h1>
-        <Modal />
+      <div className="flex  justify-center m-2">
+        <h1 className="text-5xl  font-black ">Collage Images</h1>
+        <div className="ml-5">
+          <Modal />
+        </div>
       </div>
 
       <div className="flex flex-wrap">
