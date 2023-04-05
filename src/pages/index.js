@@ -3,10 +3,15 @@ import Modal from "../components/Modal";
 import axios from "axios";
 
 export default function Home() {
-  const [imagesList, setImagesList] = useState(null);
+  const [imagesList, setImagesList] = useState([]);
 
   const getImagesList = async () => {
-    axios.get("/api/data").then((response) => setImagesList(response));
+    try {
+      const response = await axios.get("/api/data/");
+      console.log(response);
+    } catch (error) {
+      console.log(error, "error list");
+    }
   };
 
   useEffect(() => {
