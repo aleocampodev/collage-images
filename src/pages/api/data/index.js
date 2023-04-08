@@ -2,19 +2,35 @@
 import { data } from "../../../database/database";
 import axios from "axios";
 
-export const handler = async (req, res) => {
-  if (req.method === "POST") {
-    try {
-      await axios.post("http://localhost:3000/api/data", {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: req.body,
-      });
-      return res.status(201).json(data);
-    } catch (error) {
-      console.log(error, "error post");
-    }
-  }
-  return res.status(200).json(data);
-};
+function routerFactory(request) {
+  return {
+    get(cb) {
+      console.log("calling get");
+      if (request.method === "GET") {
+        return cb(request);
+      }
+    },
+    post(cb) {
+      if (request.method === "POST") {
+        return cb(request);
+      }
+    },
+    put(cb) {
+      if (request.method === "PUT") {
+        return cb(request);
+      }
+    },
+  };
+}
+
+export default async function handler(req, res) {
+  const router = routerFactory(req);
+
+  router.get(({ body, headers, params }) => {
+    return res.status(200).json(data);
+  });
+
+  router.post(({ body, headers, params }) => {
+    return res.status(200).json(body);
+  });
+}

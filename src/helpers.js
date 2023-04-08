@@ -1,4 +1,4 @@
-export const handleFile = (e, rol) => {
+/*export const handleFile = (e, rol) => {
   let file_size_img = 0;
   let file_size_video = 0;
   var result = Object.keys(e.target.files).map((key) => {
@@ -19,7 +19,7 @@ export const handleFile = (e, rol) => {
     }
   }*/
 
-  if (file_size_video > 209715200) {
+/* if (file_size_video > 209715200) {
     showToast("warning", "Videos no pueden superar los 200MB");
     return false;
   }
@@ -39,4 +39,4 @@ export const handleFile = (e, rol) => {
   });
 
   return updatedResult;
-};
+};*/

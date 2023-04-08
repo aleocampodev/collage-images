@@ -7,8 +7,9 @@ export default function Home() {
 
   const getImagesList = async () => {
     try {
-      const response = await axios.get("/api/data/");
-      console.log(response);
+      const response = await axios.get("/api/data");
+      //const responsePost = await axios.post("/api/data");
+      setImagesList(response.data);
     } catch (error) {
       console.log(error, "error list");
     }
@@ -20,11 +21,9 @@ export default function Home() {
 
   return (
     <>
-      <div className="flex  justify-center m-2">
-        <h1 className="text-5xl  font-black ">Collage Images</h1>
-        <div className="ml-5">
-          <Modal />
-        </div>
+      <div className="flex justify-center m-2">
+        <h1 className="text-5xl  font-black">Collage Images</h1>
+        <Modal />
       </div>
 
       <div className="flex flex-wrap">
@@ -39,7 +38,7 @@ export default function Home() {
                   className="w-full"
                   src={imageList.src}
                   alt={imageList.description}
-                ></img>
+                />
                 <div className="px-6 py-4">
                   <div className="font-bold text-xl mb-2">Description</div>
                   <p className="text-gray-700 text-base">

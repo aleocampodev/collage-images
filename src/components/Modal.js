@@ -1,18 +1,12 @@
 import React, { useState, useRef } from "react";
 import Modal from "react-modal";
 import { BsFillPlusSquareFill } from "react-icons/bs";
-import { handleFile } from "../helpers";
+import ShowImage from "./ShowImage";
 
 function CustomModal() {
   const [isOpen, setIsOpen] = useState(false);
   const buttonFiles = useRef();
-  const [form, setForm] = useState({
-    title_gallery: "",
-    files_description: [],
-  });
-  const [files, setFiles] = useState([]);
-  const [textMaxLength, setTextMaxLength] = useState(255);
-  const [titleMaxLength, setTitleMaxLength] = useState(100);
+  const [images, setImages] = useState([]);
 
   function openModal() {
     setIsOpen(true);
@@ -23,18 +17,33 @@ function CustomModal() {
   }
 
   const handleShowImages = (e) => {
-    const items = handleFile(e);
-    console.log(items);
-    if (items === false) {
-      return;
+    const files = e.target.files;
+    const imagesArray = [];
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const id = i;
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        const newImage = {
+          id,
+          file,
+          description: "",
+          preview: event.target.result,
+        };
+        setImages((prevImages) => [...prevImages, newImage]);
+      };
+
+      if (imagesArray.length === files.length) {
+        setImages(imagesArray);
+      }
+
+      reader.readAsDataURL(file);
     }
-    setForm({
-      ...form,
-      ...{
-        files_description: [...form.files_description, ...items],
-      },
-    });
   };
+
+  console.log(images, "img");
 
   return (
     <div>
@@ -66,6 +75,7 @@ function CustomModal() {
             </div>
           </label>
         </div>
+        <ShowImage dataImages={images} setImages={setImages} />
         <p>This is the modal content.</p>
         <button
           onClick={closeModal}
