@@ -1,6 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { data } from "../../../database/database";
-import axios from "axios";
 
 function routerFactory(request) {
   return {
@@ -20,6 +19,11 @@ function routerFactory(request) {
         return cb(request);
       }
     },
+    delete(cb) {
+      if (request.method === "DELETE") {
+        return cd(request);
+      }
+    },
   };
 }
 
@@ -31,6 +35,14 @@ export default async function handler(req, res) {
   });
 
   router.post(({ body, headers, params }) => {
+    return res.status(200).json(body);
+  });
+
+  router.put(({ body, headers, params }) => {
+    return res.status(200).json(body);
+  });
+
+  router.delete(({ body, headers, params }) => {
     return res.status(200).json(body);
   });
 }

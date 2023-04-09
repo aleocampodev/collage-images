@@ -5,8 +5,6 @@ import { Waypoint } from "react-waypoint";
 const ImagePostCard = ({
   url,
   type,
-  isOnly,
-  mimeType,
   onHandleFile = () => {},
   index = 0,
   creator = 0,

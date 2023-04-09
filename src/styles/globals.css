@@ -111,3 +111,8 @@ a {
     color-scheme: dark;
   }
 }
+
+div.ReactModal__Overlay.ReactModal__Overlay--after-open{
+	padding:67px !important;
+	background-color: red !important;
+}
