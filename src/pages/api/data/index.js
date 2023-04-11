@@ -2,7 +2,7 @@
 import { data } from "../../../database/database";
 import axios from "axios";
 
-async function routerFactory(request) {
+function routerFactory(request) {
   return {
     get(cb) {
       console.log("calling get");
@@ -37,20 +37,18 @@ async function routerFactory(request) {
 export default async function handler(req, res) {
   const router = routerFactory(req);
 
-  router.get(({ body, headers, params }) => {
-    return res.status(200).json(data);
-  });
+  router.get(() => res.status(200).json(data));
 
   router.post(({ body, headers, params }) => {
     console.log(body);
     return res.status(201).json({ message: "Data received" });
   });
 
-  router.put(({ body, headers, params }) => {
+  router.put(() => {
     return res.status(200).json();
   });
 
-  router.delete(({ body, headers, params }) => {
+  router.delete(() => {
     return res.status(200).json();
   });
 }
