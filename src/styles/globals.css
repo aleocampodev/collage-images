@@ -1,3 +1,4 @@
+
 /* tailwind.css */
 @tailwind base;
 @tailwind components;
@@ -113,6 +114,7 @@ a {
 }
 
 div.ReactModal__Overlay.ReactModal__Overlay--after-open{
-	padding:67px !important;
-	background-color: red !important;
+	display: flex !important;
+  justify-content: center !important;
 }
+

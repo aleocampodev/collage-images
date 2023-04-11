@@ -1,7 +1,8 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { data } from "../../../database/database";
+import axios from "axios";
 
-function routerFactory(request) {
+async function routerFactory(request) {
   return {
     get(cb) {
       console.log("calling get");
@@ -9,8 +10,14 @@ function routerFactory(request) {
         return cb(request);
       }
     },
-    post(cb) {
+    async post(cb) {
       if (request.method === "POST") {
+        const update = await axios("/api/data", {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: request.body,
+        });
         return cb(request);
       }
     },
@@ -21,7 +28,7 @@ function routerFactory(request) {
     },
     delete(cb) {
       if (request.method === "DELETE") {
-        return cd(request);
+        return cb(request);
       }
     },
   };
@@ -35,14 +42,15 @@ export default async function handler(req, res) {
   });
 
   router.post(({ body, headers, params }) => {
-    return res.status(200).json(body);
+    console.log(body);
+    return res.status(201).json({ message: "Data received" });
   });
 
   router.put(({ body, headers, params }) => {
-    return res.status(200).json(body);
+    return res.status(200).json();
   });
 
   router.delete(({ body, headers, params }) => {
-    return res.status(200).json(body);
+    return res.status(200).json();
   });
 }

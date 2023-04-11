@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import Modal from "../components/Modal";
-import "../styles/styles.module.css";
 import axios from "axios";
 
 export default function Home() {

@@ -1,7 +1,8 @@
 import React, { useState, useRef } from "react";
 import Modal from "react-modal";
 import { BsFillPlusSquareFill } from "react-icons/bs";
-import "../styles/styles.module.css";
+import index from "../styles/index.module.css";
+import "../styles/index.module.css";
 import ShowImage from "./ShowImage";
 import axios from "axios";
 
@@ -24,9 +25,9 @@ function CustomModal() {
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      const id = i;
+      let id = i;
       const reader = new FileReader();
-
+      console.log(id);
       reader.onload = (event) => {
         const newImage = {
           id,
@@ -46,17 +47,26 @@ function CustomModal() {
   };
 
   const sendData = async () => {
-    const response = await axios("/api/data", {
-      method: "POST",
-      headers: {
-        "Content-Type": " multipart/form-data",
-        onUploadProgress: (event) => {
-          const p = Math.round((event.loaded * 100) / event.total);
-          setProgress(p);
-        },
-      },
-      data: images,
+    const formData = new FormData();
+    images.forEach((file) => {
+      console.log(file, "hu");
+      formData.append("files", file.file);
+      formData.append("descriptions", file.description);
     });
+
+    try {
+      const { status } = await axios.post("/api/data", formData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (status === 201) {
+        setIsOpen(false);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   console.log(images);
@@ -65,7 +75,7 @@ function CustomModal() {
     <div>
       <button
         onClick={openModal}
-        className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 button"
+        className="block text-white bg-lime-700 hover:bg-lime-800 focus:ring-4 focus:outline-none focus:ring-lime-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-lime-600 dark:hover:bg-lime-700 dark:focus:ring-lime-800 "
       >
         Create
       </button>
@@ -75,49 +85,56 @@ function CustomModal() {
           onRequestClose={closeModal}
           className="w-9/12 mt-8 modal"
         >
-          <div className="bg-white rounded-lg shadow-lg p-4">
-            <div>
-              <label htmlFor="upload-files" className="upload-files w-100">
-                <div className="upload-files-button">
-                  <div className="container-icon">
-                    <BsFillPlusSquareFill size="3em" />
+          <div className="bg-white rounded-lg shadow-lg p-7">
+            <label htmlFor="upload-files" className="upload-files w-100">
+              <div className="flex justify-center">
+                <div className="absolute">
+                  <div className="flex justify-center m-2">
+                    <BsFillPlusSquareFill
+                      size="3em"
+                      className="cursor-pointer "
+                      color="rgb(253 164 175"
+                    />
                   </div>
                   <label
                     htmlFor="upload-files"
                     className={"files-selector m-3"}
                   >
-                    Seleccionar archivos ...
+                    Select files ...
                   </label>
-                  <input
-                    id="upload-files"
-                    ref={buttonFiles}
-                    type="file"
-                    name="images"
-                    onChange={handleShowImages}
-                    accept=".mp4, .mov, .png, .jpeg, .jpg, .avi, .m4v"
-                    multiple
-                  />
                 </div>
-              </label>
-            </div>
+                <input
+                  className={index.uploadFilesInput}
+                  ref={buttonFiles}
+                  type="file"
+                  name="images"
+                  onChange={handleShowImages}
+                  accept=".mp4, .mov, .png, .jpeg, .jpg, .avi, .m4v"
+                  multiple
+                />
+              </div>
+            </label>
+
             {images.length > 0 && (
               <ShowImage images={images} setImages={setImages} />
             )}
-            {images.length > 0 && (
-              <button
-                onClick={() => sendData()}
-                className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              >
-                Add Image
-              </button>
-            )}
+            <div className="flex justify-end mt-24">
+              {images.length > 0 && (
+                <button
+                  onClick={() => sendData()}
+                  className="block text-white bg-rose-300 hover:bg-rose-300 focus:ring-4 focus:outline-none focus:ring-rose-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-rose-300 dark:hover:bg-rose-300 dark:focus:ring-rose-300"
+                >
+                  Add Image
+                </button>
+              )}
 
-            <button
-              onClick={closeModal}
-              className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-              Close Modal
-            </button>
+              <button
+                onClick={closeModal}
+                className="block text-white bg-lime-700 hover:bg-lime-800 focus:ring-4 focus:outline-none focus:ring-lime-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-lime-600 dark:hover:bg-lime-700 dark:focus:ring-lime-800 ml-5"
+              >
+                Close Modal
+              </button>
+            </div>
           </div>
         </Modal>
       </>
