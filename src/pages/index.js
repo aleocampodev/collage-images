@@ -38,7 +38,7 @@ export default function Home() {
               >
                 <img
                   className="w-full"
-                  src={imageList.src}
+                  src={imageList.file}
                   alt={imageList.description}
                 />
                 <div className="px-6 py-4">

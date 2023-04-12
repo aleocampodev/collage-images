@@ -25,17 +25,14 @@ function CustomModal() {
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      let id = i;
       const reader = new FileReader();
-      console.log(id);
       reader.onload = (event) => {
         const newImage = {
-          id,
           file,
           description: "",
           preview: event.target.result,
         };
-        setImages([...images, newImage]);
+        setImages((prevImages) => [...prevImages, newImage]);
       };
 
       if (imagesArray.length === files.length) {
@@ -49,9 +46,9 @@ function CustomModal() {
   const sendData = async () => {
     const formData = new FormData();
     images.forEach((file) => {
-      console.log(file, "hu");
-      formData.append("files", file.file);
-      formData.append("descriptions", file.description);
+      console.log(file);
+      formData.append("file", URL.createObjectURL(file.file));
+      formData.append("description", file.description);
     });
 
     try {
@@ -69,7 +66,7 @@ function CustomModal() {
     }
   };
 
-  console.log(images);
+  console.log(images, "images");
 
   return (
     <div>

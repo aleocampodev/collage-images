@@ -12,12 +12,6 @@ function routerFactory(request) {
     },
     async post(cb) {
       if (request.method === "POST") {
-        const update = await axios("/api/data", {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: request.body,
-        });
         return cb(request);
       }
     },
@@ -40,7 +34,14 @@ export default async function handler(req, res) {
   router.get(() => res.status(200).json(data));
 
   router.post(({ body, headers, params }) => {
-    console.log(body);
+    const { description, file } = body;
+    const newImage = {
+      id: data.length + 1,
+      description: description,
+      file: file,
+    };
+    console.log(file, "file");
+    data.push(newImage);
     return res.status(201).json({ message: "Data received" });
   });
 
