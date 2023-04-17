@@ -6,7 +6,7 @@ import "../styles/index.module.css";
 import ShowImage from "./ShowImage";
 import axios from "axios";
 
-function CustomModal() {
+function CustomModal({ getImagesList }) {
   const [isOpen, setIsOpen] = useState(false);
   const buttonFiles = useRef();
   const [images, setImages] = useState([]);
@@ -17,6 +17,7 @@ function CustomModal() {
 
   function closeModal() {
     setIsOpen(false);
+    setImages([]);
   }
 
   const handleShowImages = (e) => {
@@ -45,21 +46,23 @@ function CustomModal() {
 
   const sendData = async () => {
     const formData = new FormData();
-    images.forEach((file) => {
+    images.forEach((file, i) => {
       console.log(file);
-      formData.append("file", URL.createObjectURL(file.file));
-      formData.append("description", file.description);
+      formData.append(`files-${i}`, URL.createObjectURL(file.file));
+      formData.append(`descriptions-${i}`, file.description[i]);
     });
 
     try {
       const { status } = await axios.post("/api/data", formData, {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
         },
       });
 
       if (status === 201) {
         setIsOpen(false);
+        setImages([]);
+        getImagesList();
       }
     } catch (error) {
       console.error(error);

@@ -1,11 +1,17 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { data } from "../../../database/database";
-import axios from "axios";
+
+import multer from "multer";
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
 
 function routerFactory(request) {
   return {
     get(cb) {
-      console.log("calling get");
       if (request.method === "GET") {
         return cb(request);
       }
@@ -27,22 +33,16 @@ function routerFactory(request) {
     },
   };
 }
+const upload = multer({ dest: "public/images" });
 
 export default async function handler(req, res) {
   const router = routerFactory(req);
 
   router.get(() => res.status(200).json(data));
 
-  router.post(({ body, headers, params }) => {
-    const { description, file } = body;
-    const newImage = {
-      id: data.length + 1,
-      description: description,
-      file: file,
-    };
-    console.log(file, "file");
-    data.push(newImage);
-    return res.status(201).json({ message: "Data received" });
+  router.post(async () => {
+    console.log(req, "ji");
+    res.status(201).json({ message: "received" });
   });
 
   router.put(() => {

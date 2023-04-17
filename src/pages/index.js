@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import Modal from "../components/Modal";
+import Image from "next/image";
 import axios from "axios";
+import Modal from "../components/Modal";
 
 export default function Home() {
   const [imagesList, setImagesList] = useState([]);
@@ -10,6 +11,7 @@ export default function Home() {
       const response = await axios.get("/api/data");
       //const responsePost = await axios.post("/api/data");
       setImagesList(response.data);
+      console.log(response.data);
     } catch (error) {
       console.log(error, "error list");
     }
@@ -24,7 +26,7 @@ export default function Home() {
       <div className="flex justify-center mb-5">
         <h1 className="text-5xl  font-black">Collage Images</h1>
         <div className="ml-8">
-          <Modal />
+          <Modal getImagesList={getImagesList} />
         </div>
       </div>
 
@@ -36,10 +38,12 @@ export default function Home() {
                 className="max-w-sm rounded overflow-hidden shadow-lg m-2"
                 key={imageList.id}
               >
-                <img
+                <Image
                   className="w-full"
-                  src={imageList.file}
+                  src={imageList.src}
                   alt={imageList.description}
+                  width={100}
+                  height={100}
                 />
                 <div className="px-6 py-4">
                   <div className="font-bold text-xl mb-2">Description</div>
