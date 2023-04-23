@@ -1,0 +1,39 @@
+
+.upload-files-button {
+	width: 100%;
+	border-radius: 15px;
+	background-color: #f1f3f5;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	transition: 0.3s;
+	flex-direction: column;
+}
+	.upload-files {
+	  cursor: pointer;
+	  padding: 1rem !important;
+	}
+
+	.uploadFilesInput {
+	  opacity: 0;
+	  position: absolute;
+	  z-index: 10;
+	  width:10%;
+	}
+  
+
+  .upload-files-button:hover {
+	background-color: red;
+	color: white;
+	transition: 0.3s;
+  }
+
+  .upload-files-input{
+	width: 100%;
+  }
+
+.imageUploaded{
+	width:255px;
+	height:255px;
+}

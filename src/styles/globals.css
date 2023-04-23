@@ -1,3 +1,4 @@
+
 /* tailwind.css */
 @tailwind base;
 @tailwind components;
@@ -111,3 +112,9 @@ a {
     color-scheme: dark;
   }
 }
+
+div.ReactModal__Overlay.ReactModal__Overlay--after-open{
+	display: flex !important;
+  justify-content: center !important;
+}
+

@@ -2,7 +2,7 @@ export const data = [
   {
     id: 1,
     description: "White flowers",
-    src: "/images/flowers.jpeg",
+    src: "/flowers.jpeg",
   },
   {
     id: 2,
