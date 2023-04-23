@@ -48,8 +48,8 @@ function CustomModal({ getImagesList }) {
     const formData = new FormData();
     images.forEach((file, i) => {
       console.log(file);
-      formData.append(`files-${i}`, URL.createObjectURL(file.file));
-      formData.append(`descriptions-${i}`, file.description[i]);
+      formData.append(`files`, file.file);
+      formData.append(`descriptions`, file.description);
     });
 
     try {
