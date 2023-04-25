@@ -17,7 +17,7 @@ const ShowImage = ({ images, setImages }) => {
       {images.map((item, index) => (
         <div key={item.id}>
           <Image
-            src={item.preview}
+            src={URL.createObjectURL(item)}
             alt="uploaded"
             className={style.imageUploaded}
             width="100"
