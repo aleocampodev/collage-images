@@ -45,11 +45,13 @@ export default async function handler(req, res) {
     form.parse(req, (err, fields, files) => {
       if (err) return reject(err);
       console.log(fields, files, "fields");
-      /* console.log(files.files.filepath, "path");
-      var oldPath = files.files.filepath;
-      var newPath = `./public/images/${files.files.originalFilename}`;
-      mv(oldPath, newPath, function (err) {});*/
-      res.status(200).json({ fields, files });
+      console.log(files.files, "path");
+      files.files.forEach((item) => {
+        let oldPath = item.filepath;
+        let newPath = `./public/images/${item.originalFilename}`;
+        mv(oldPath, newPath, function (err) {});
+      });
+      res.status(201).json({ fields, files });
     });
 
     /*const uploadedFiles = Object.values(files).map((file, i) => {
@@ -62,7 +64,7 @@ export default async function handler(req, res) {
         url: `/images/${file.name}`,
       };
     });
-    res.status(201).json(uploadedFiles);*/
+    res.status(201).json(uploadedFiles)*/
   });
 
   router.put(() => {
