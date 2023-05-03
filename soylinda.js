@@ -1,1 +1,1 @@
-["lazy",1,"beautiful"]
+const words = ["lazy", 1, "beautiful"];

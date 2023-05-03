@@ -1,7 +1,8 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { data } from "../../../database/database";
 import { formidable } from "formidable";
-var mv = require("mv");
+const fs = require("fs");
+const path = require("path");
 
 export const config = {
   api: {
@@ -46,25 +47,55 @@ export default async function handler(req, res) {
       if (err) return reject(err);
       console.log(fields, files, "fields");
       console.log(files.files, "path");
-      files.files.forEach((item) => {
-        let oldPath = item.filepath;
-        let newPath = `./public/images/${item.originalFilename}`;
-        mv(oldPath, newPath, function (err) {});
-      });
-      res.status(201).json({ fields, files });
+      if (typeof files.files === "object" && typeof fields === "object") {
+        let descriptions = fields.descriptions;
+        let oldPath = files.files.filepath;
+        let newPath = `./public/images/${files.files.originalFilename}`;
+        fs.rename(oldPath, newPath, function (err) {});
+        const newData = {
+          id: data.length + 1,
+
+          description: descriptions,
+          src: `/images/${files.files.originalFilename}`,
+        };
+        const addNewData = data.push(newData);
+        fs.writeFile(
+          "/src/database/database.js",
+          addNewData,
+          function (err) {}
+        );
+        console.log(newData, "jighj");
+      } else {
+        files.files.forEach((item) => {
+          let oldPath = item.filepath;
+          let newPath = `./public/images/${item.originalFilename}`;
+          fs.rename(oldPath, newPath, function (err) {});
+        });
+      }
+
+      /*const uploadedFiles = Object.values(files).map((file, i) => {
+        const oldPath = file.path;
+        //const newPath = path.join(process.cwd(), "public", "images", file.name);
+        fs.renameSync(oldPath, newPath);
+        return {
+          id: data.length + 1,
+          name: file.name,
+          description: descriptions[i],
+          url: `/images/${file.name}`,
+        };
+      });*/
+
+      res.status(201).json({ files, fields });
     });
 
-    /*const uploadedFiles = Object.values(files).map((file, i) => {
-      const oldPath = file.path;
-      const newPath = path.join(process.cwd(), "public", "images", file.name);
-      fs.renameSync(oldPath, newPath);
-      return {
-        name: file.name,
-        description: descriptions[i],
-        url: `/images/${file.name}`,
-      };
-    });
-    res.status(201).json(uploadedFiles)*/
+    /*fs.writeFile("database.js", "[...database, ...uploadFiles]", (err) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+
+      console.log("casi que si");
+    });*/
   });
 
   router.put(() => {

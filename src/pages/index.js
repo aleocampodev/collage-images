@@ -21,6 +21,8 @@ export default function Home() {
     getImagesList();
   }, []);
 
+  console.log(imagesList, "imagesList");
+
   return (
     <>
       <div className="flex justify-center mb-5">
