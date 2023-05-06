@@ -58,13 +58,15 @@ export default async function handler(req, res) {
           description: descriptions,
           src: `/images/${files.files.originalFilename}`,
         };
-        const addNewData = data.push(newData);
-        fs.writeFile(
-          "/src/database/database.js",
-          addNewData,
+        const arr = arr.push(newData);
+        const dataNew = fs.writeFile(
+          "database.js",
+          JSON.stringify(arr),
           function (err) {}
         );
-        console.log(newData, "jighj");
+
+        //const arr = JSON.stringify(dataNew);
+        // arr.push(newData);
       } else {
         files.files.forEach((item) => {
           let oldPath = item.filepath;
