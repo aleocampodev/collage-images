@@ -1,3 +1,5 @@
+import {connect} from 'mongoose'
+
 export const data = [
   {
     id: 1,

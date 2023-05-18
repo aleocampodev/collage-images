@@ -1,5 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { data } from "../../../database/database";
+import { data } from "../../../utils/mongodb";
 import { formidable } from "formidable";
 const fs = require("fs");
 const path = require("path");
@@ -46,10 +46,16 @@ export default async function handler(req, res) {
     form.parse(req, (err, fields, files) => {
       if (err) return reject(err);
       console.log(fields, files, "fields");
-      console.log(files.files, "path");
-      if (typeof files.files === "object" && typeof fields === "object") {
+      console.log(files.files, files.files.filepath, "path");
+      console.log(
+        typeof files.files,
+        typeof fields.descriptions,
+        Object.keys(files.files).length
+      );
+      if (typeof fields.descriptions === "string") {
+        console.log("probando object");
         let descriptions = fields.descriptions;
-        let oldPath = files.files.filepath;
+        let oldPath = files.files?.filepath;
         let newPath = `./public/images/${files.files.originalFilename}`;
         fs.rename(oldPath, newPath, function (err) {});
         const newData = {
@@ -58,34 +64,44 @@ export default async function handler(req, res) {
           description: descriptions,
           src: `/images/${files.files.originalFilename}`,
         };
-        const arr = arr.push(newData);
-        const dataNew = fs.writeFile(
-          "database.js",
-          JSON.stringify(arr),
-          function (err) {}
-        );
-
-        //const arr = JSON.stringify(dataNew);
-        // arr.push(newData);
+        data.push(newData);
+        /*const dataNew = fs.writeFile(
+            "database.js",
+            JSON.stringify(arr),
+            function (err) {}
+          );
+  
+          //const arr = JSON.stringify(dataNew);
+           arr.push(newData);*/
       } else {
+        /* const uploadedFiles = files.files.map((file, i) => {
+          const oldPath = file.path;
+          //const newPath = path.join(process.cwd(), "public", "images", file.name);
+          fs.renameSync(oldPath, newPath);
+          return {
+            id: data.length + 1,
+
+            //description: descriptions[i],
+            url: `/images/${files.files.originalFilename}`,
+          };
+        })*/
         files.files.forEach((item) => {
+          console.log(item, "i");
           let oldPath = item.filepath;
           let newPath = `./public/images/${item.originalFilename}`;
           fs.rename(oldPath, newPath, function (err) {});
+          const newData = {
+            id: data.length + 1,
+
+            //description: descriptions,
+            src: `/images/${item.originalFilename}`,
+          };
+          fields.descriptions.forEach((description) =>
+            console.log(description)
+          );
+          data.push(newData);
         });
       }
-
-      /*const uploadedFiles = Object.values(files).map((file, i) => {
-        const oldPath = file.path;
-        //const newPath = path.join(process.cwd(), "public", "images", file.name);
-        fs.renameSync(oldPath, newPath);
-        return {
-          id: data.length + 1,
-          name: file.name,
-          description: descriptions[i],
-          url: `/images/${file.name}`,
-        };
-      });*/
 
       res.status(201).json({ files, fields });
     });
@@ -100,9 +116,10 @@ export default async function handler(req, res) {
     });*/
   });
 
-  router.put(() => {
+  /*router.put(async() => {
+    const form = new formidable.IncomingForm({ multiples: true }); 
     return res.status(200).json();
-  });
+  });*/
 
   router.delete(() => {
     return res.status(200).json();

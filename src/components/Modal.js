@@ -42,7 +42,7 @@ function CustomModal({ getImagesList }) {
 
       if (status === 201) {
         setIsOpen(false);
-        // setImages([]);
+        setImages([]);
         getImagesList();
       }
     } catch (error) {
